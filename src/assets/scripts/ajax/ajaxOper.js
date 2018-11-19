@@ -7,8 +7,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import vueAxios from 'vue-axios';
 
-import constants from '../../../../static/constants.js';
-import loginOper from '../common/loginOper.js';
+import constants from './../../../../static/constants.js';
 
 Vue.use(vueAxios, axios);
 
@@ -55,12 +54,6 @@ const ajaxHttp = function (params) {
 const ajaxGet = (url, config, successFunc = defaultFunc, errorFunc = defaultFunc) => {
     Vue.axios.get(url, config).then((res) => {
 
-        // 判断是否是单点登录拦截,则回到登录页面
-        if (_.isString(res.data) && res.data.indexOf("单点登录") > 0) {
-            loginOper.userLogout();
-            return;
-        }
-
         if (res.status === 200) {
             successFunc(res.data);
         } else {
@@ -90,8 +83,6 @@ const ajaxPost = (url, data, config, successFunc = defaultFunc, errorFunc = defa
         }
     }).catch((err) => {
         console.error(err.message);
-        // 请求失败，重新登录
-        loginOper.userLogout();
         errorFunc();
     });
 }
