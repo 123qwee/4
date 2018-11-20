@@ -46,18 +46,26 @@
     <el-row class="row_2">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="运营商模块" name="first">
-          <vFirst></vFirst>
+          <vFirst v-if="activeName == 'first'"></vFirst>
         </el-tab-pane>
         <el-tab-pane label="多头信息" name="second">
-          <vSecond></vSecond>
+          <vSecond v-if="activeName == 'second'"></vSecond>
         </el-tab-pane>
         <el-tab-pane label="失信情况" name="third">
-          <vThird></vThird>
+          <vThird v-if="activeName == 'third'"></vThird>
         </el-tab-pane>
-        <el-tab-pane label="QQ群风险" name="fourth">QQ群风险</el-tab-pane>
-        <el-tab-pane label="设备指纹风险" name="fifth">设备指纹风险</el-tab-pane>
-        <el-tab-pane label="变更信息" name="sixth">变更信息</el-tab-pane>
-        <el-tab-pane label="黑名单信息" name="seventh">黑名单信息</el-tab-pane>
+        <el-tab-pane label="QQ群风险" name="fourth">
+          <vFourth v-if="activeName == 'fourth'"></vFourth>
+        </el-tab-pane>
+        <el-tab-pane label="设备指纹风险" name="fifth">
+          <vFifth v-if="activeName == 'fifth'"></vFifth>
+        </el-tab-pane>
+        <el-tab-pane label="变更信息" name="sixth">
+          <vSixth v-if="activeName == 'sixth'"></vSixth>
+        </el-tab-pane>
+        <el-tab-pane label="黑名单信息" name="seventh">
+          <vSeventh v-if="activeName == 'seventh'"></vSeventh>
+        </el-tab-pane>
       </el-tabs>
     </el-row>
   </div>
@@ -67,15 +75,23 @@
 import vFirst from "./first";
 import vSecond from "./second";
 import vThird from "./third";
+import vFourth from "./fourth";
+import vFifth from "./fifth";
+import vSixth from "./sixth";
+import vSeventh from "./seventh";
 export default {
   components: {
     vFirst,
     vSecond,
-    vThird
+    vThird,
+    vFourth,
+    vFifth,
+    vSixth,
+    vSeventh
   },
   data() {
     return {
-      activeName: "third"
+      activeName: "seventh"
     };
   },
   methods: {

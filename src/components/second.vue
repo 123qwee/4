@@ -1,7 +1,7 @@
 <template>
     <div class="main second">
-        <el-row :gutter="60" class="row">
-            <el-col :span="12" class="box_1">
+        <el-row :gutter="10" class="row">
+            <el-col :span="11" class="box_1">
                 <div class="title">多头信息 - 申请多头</div>
                 <div class="box_1_head">
                     <div>
@@ -35,7 +35,7 @@
                     </el-pagination>
                 </div>
             </el-col>
-            <el-col :span="12" class="box_2">
+            <el-col :span="11" class="box_2">
                 <div class="box_2_head">
                     <div class="title">多头信息 - 机构类型</div>
                     <el-button-group>
@@ -46,14 +46,14 @@
                 <div id="third_1"></div>
             </el-col>
         </el-row>
-        <el-row :gutter="60" style="margin-top:40px;">
-            <el-col :span="12" class="box_3">
+        <el-row :gutter="10" style="margin-top:40px;">
+            <el-col :span="11" class="box_3">
                 <div class="box_3_head">
                     <div class="title">借贷多头 - 借贷次数</div>
                 </div>
                 <div id="third_2"></div>
             </el-col>
-            <el-col :span="12" class="box_4">
+            <el-col :span="11" class="box_4">
                 <div class="box_4_head">
                     <div class="title">借贷多头 - 机构数</div>
                 </div>
@@ -136,7 +136,7 @@ export default {
       let aa = Object.assign(that.barOptions2, {});
       aa.title.text = "借贷多头-近X天贷款的机构数";
 
-      that.thirdChart2.setOption(that.barOptions2);
+      that.thirdChart2.setOption(aa);
       that.thirdChart2.resize();
     },
     handleSecondChart3() {
@@ -144,7 +144,7 @@ export default {
       let { ...aa } = that.barOptions2;
       aa.title.text = "借贷多头-近X天贷款的次数";
 
-      that.thirdChart3.setOption(that.barOptions2);
+      that.thirdChart3.setOption(aa);
       that.thirdChart3.resize();
     }
   }
@@ -155,16 +155,11 @@ export default {
 .second {
   .el-col {
     height: 620px;
-    // padding: 20px;
-  }
-//   .row {
-//     .el-col {
-//       height: 620px;
-//     }
-//   }
-  .el-col:hover {
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-    border-color: rgba(0, 0, 0, 0.2);
+    margin-left: 12px;
+    &:hover {
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
   }
   .box_1 {
     .title {
@@ -243,7 +238,7 @@ export default {
     }
     #third_2,
     #third_3 {
-      height: calc(100% - 70px)
+      height: calc(100% - 70px);
     }
     #third_1 {
       height: calc(100% - 105px);
