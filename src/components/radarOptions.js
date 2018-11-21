@@ -41,6 +41,12 @@ export default {
     data: [{
       value: [1, 5, 2, 4, 3],
       name: '预算分配'
-    }]
-  }]
+    }],
+    itemStyle: {
+      color: function (params) {
+        var colorList = ["#3AA1FF", "#4CCA73", "#F9D337", "#415088"];
+        return colorList[params.dataIndex];
+      }
+    }
+  }],
 }

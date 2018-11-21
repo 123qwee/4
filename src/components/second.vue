@@ -125,10 +125,10 @@ export default {
     handleQuery() {},
     handleSecondChart1() {
       let that = this;
-      let aa = JSON.parse(JSON.stringify(that.barOptions2));
+      let aa = Object.assign(that.barOptions2, {});
       aa.title.text = "多平台借贷分析-近X天贷款申请次数";
-      that.thirdChart1.setOption(aa);
 
+      that.thirdChart1.setOption(aa);
       that.thirdChart1.resize();
     },
     handleSecondChart2() {
