@@ -3,131 +3,135 @@
   <div class="title">黑名单信息</div>
   <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="黑名单信息" name="blackList">
-        <transition-group mode="out-in">
-        <div class="content" key="1_1">
-          <div>
-            <div>
-              <span class="spanBorderColor_1"></span>
-              <div class="line"></div>
-              <div>手机和姓名是否在黑名单</div>
+        <transition-group name="animation_left_right">
+          <template v-if="activeName == 'blackList'">
+            <div class="content" key="1_1">
+              <div>
+                <div>
+                  <span class="spanBorderColor_1"></span>
+                  <div class="line"></div>
+                  <div>手机和姓名是否在黑名单</div>
+                </div>
+                <div>
+                  <i class="el-icon-circle-close-outline"></i>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_1"></span>
+                  <div class="line"></div>
+                  <div>手机和姓名黑名单更新时间</div>
+                </div>
+                <div>-</div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_2"></span>
+                  <div class="line"></div>
+                  <div>身份证和姓名是否在黑名单</div>
+                </div>
+                <div>
+                  <i class="el-icon-circle-close-outline"></i>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_2"></span>
+                  <div class="line"></div>
+                  <div>身份证和姓名黑名单更新时间</div>
+                </div>
+                <div>-</div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_3"></span>
+                  <div>被标记的黑名单分类</div>
+                </div>
+                <div>
+                </div>
+              </div>
             </div>
-            <div>
-              <i class="el-icon-circle-close-outline"></i>
+            <div class="footer" key="1_2">
+              <div>
+                <div>逾期次数</div>
+                <div>0</div>
+              </div>
+              <div>
+                <div>最大逾期金额(元)</div>
+                <div>0</div>
+              </div>
+              <div>
+                <div>最大逾期天数</div>
+                <div>0</div>
+              </div>
             </div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_1"></span>
-              <div class="line"></div>
-              <div>手机和姓名黑名单更新时间</div>
-            </div>
-            <div>-</div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_2"></span>
-              <div class="line"></div>
-              <div>身份证和姓名是否在黑名单</div>
-            </div>
-            <div>
-              <i class="el-icon-circle-close-outline"></i>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_2"></span>
-              <div class="line"></div>
-              <div>身份证和姓名黑名单更新时间</div>
-            </div>
-            <div>-</div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_3"></span>
-              <div>被标记的黑名单分类</div>
-            </div>
-            <div>
-            </div>
-          </div>
-        </div>
-        <div class="footer" key="1_2">
-          <div>
-            <div>逾期次数</div>
-            <div>0</div>
-          </div>
-          <div>
-            <div>最大逾期金额(元)</div>
-            <div>0</div>
-          </div>
-          <div>
-            <div>最大逾期天数</div>
-            <div>0</div>
-          </div>
-        </div>
+          </template>
         </transition-group>
       </el-tab-pane>
       <el-tab-pane label="灰名单信息" name="greyList">
-        <transition-group mode="out-in">
-        <div class="content" key="2_1">
-          <div>
-            <div>
-              <span class="spanBorderColor_1"></span>
-              <div class="line"></div>
-              <div>手机和姓名是否在灰名单</div>
+        <transition-group name="animation_right_left">
+          <template v-if="activeName == 'greyList'">
+            <div class="content" key="2_1">
+              <div>
+                <div>
+                  <span class="spanBorderColor_1"></span>
+                  <div class="line"></div>
+                  <div>手机和姓名是否在灰名单</div>
+                </div>
+                <div>
+                  <i class="el-icon-circle-close-outline"></i>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_1"></span>
+                  <div class="line"></div>
+                  <div>手机和姓名灰名单更新时间</div>
+                </div>
+                <div>-</div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_2"></span>
+                  <div class="line"></div>
+                  <div>身份证和姓名是否在灰名单</div>
+                </div>
+                <div>
+                  <i class="el-icon-circle-close-outline"></i>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_2"></span>
+                  <div class="line"></div>
+                  <div>身份证和姓名灰名单更新时间</div>
+                </div>
+                <div>-</div>
+              </div>
+              <div>
+                <div>
+                  <span class="spanBorderColor_3"></span>
+                  <div>被标记的灰名单分类</div>
+                </div>
+                <div>
+                </div>
+              </div>
             </div>
-            <div>
-              <i class="el-icon-circle-close-outline"></i>
+            <div class="footer" key="2_2">
+              <div>
+                <div>逾期次数</div>
+                <div>0</div>
+              </div>
+              <div>
+                <div>最大逾期金额(元)</div>
+                <div>0</div>
+              </div>
+              <div>
+                <div>最大逾期天数</div>
+                <div>0</div>
+              </div>
             </div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_1"></span>
-              <div class="line"></div>
-              <div>手机和姓名灰名单更新时间</div>
-            </div>
-            <div>-</div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_2"></span>
-              <div class="line"></div>
-              <div>身份证和姓名是否在灰名单</div>
-            </div>
-            <div>
-              <i class="el-icon-circle-close-outline"></i>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_2"></span>
-              <div class="line"></div>
-              <div>身份证和姓名灰名单更新时间</div>
-            </div>
-            <div>-</div>
-          </div>
-          <div>
-            <div>
-              <span class="spanBorderColor_3"></span>
-              <div>被标记的灰名单分类</div>
-            </div>
-            <div>
-            </div>
-          </div>
-        </div>
-        <div class="footer" key="2_2">
-          <div>
-            <div>逾期次数</div>
-            <div>0</div>
-          </div>
-          <div>
-            <div>最大逾期金额(元)</div>
-            <div>0</div>
-          </div>
-          <div>
-            <div>最大逾期天数</div>
-            <div>0</div>
-          </div>
-        </div>
+          </template>
         </transition-group>
       </el-tab-pane>
     </el-tabs>

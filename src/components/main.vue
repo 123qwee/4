@@ -46,13 +46,13 @@
     <el-row class="row_2">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="运营商模块" name="first">
-          <vFirst v-if="activeName == 'first'"></vFirst>
+            <vFirst v-if="activeName == 'first'"></vFirst>
         </el-tab-pane>
         <el-tab-pane label="多头信息" name="second">
-          <vSecond v-if="activeName == 'second'"></vSecond>
+            <vSecond v-if="activeName == 'second'"></vSecond>
         </el-tab-pane>
         <el-tab-pane label="失信情况" name="third">
-          <vThird v-if="activeName == 'third'"></vThird>
+            <vThird v-if="activeName == 'third'"></vThird>
         </el-tab-pane>
         <el-tab-pane label="QQ群风险" name="fourth">
           <vFourth v-if="activeName == 'fourth'"></vFourth>
@@ -99,7 +99,6 @@ export default {
   }
 };
 </script>
-
 <style lang="scss" scoped>
 .main {
   margin: 20px;

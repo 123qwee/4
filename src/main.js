@@ -23,21 +23,24 @@ require("es6-promise").polyfill();
 import 'normalize.css'
 import './assets/styles/animate.css';
 
-// 2.4 引入Lodash，并将其设置为全局变量
+// 2.2 引入自定义过渡效果
+import './assets/styles/transform.css';
+
+// 2.3 引入Lodash，并将其设置为全局变量
 import _ from 'lodash';
 window._ = _;
 
-// 2.5 引入lscache存储离线数据
+// 2.4 引入lscache存储离线数据
 import lscache from 'lscache';
 window.lscache = lscache;
 
-// 2.6 引入moment时间处理库
+// 2.5 引入moment时间处理库
 const moment = require('moment');
 moment.locale('zh-cn');
 
 window.moment = moment;
 
-// 2.7 引入echarts
+// 2.6 引入echarts
 import eCharts from 'echarts/lib/echarts.js';
 Vue.prototype.$echarts = eCharts;
 
@@ -52,7 +55,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/dataZoom';
 
-// 2.9 设置jQuery 全局变量
+// 2.7 设置jQuery 全局变量
 import $ from 'jquery';
 window.jQuery = window.$ = $;
 

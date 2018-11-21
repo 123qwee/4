@@ -93,6 +93,7 @@ export default {
 
       let aa = _.cloneDeep(that.firstChartOptions);
       aa.series[0].data[5] = 111;
+      
       that.secondChart.setOption(aa);
       that.secondChart.resize();
     }
