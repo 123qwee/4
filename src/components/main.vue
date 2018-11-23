@@ -3,7 +3,7 @@
     <el-row class="row_1">
       <el-col :span="2" class="col col_1">
         <div class="img_name">
-          <span>路</span>
+          <span>{{userInfo.name.slice(0,1)}}</span>
         </div>
       </el-col>
       <el-col :span="14" class="col">
@@ -39,12 +39,12 @@
           </div>
           <div class="box">
             <div>失信情况</div>
-            <div>是</div>
+            <div>{{isUntrusted ? "是": "否" }}</div>
           </div>
       </el-col>
     </el-row>
     <el-row class="row_2">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="运营商模块" name="first">
             <vFirst v-if="activeName == 'first'"></vFirst>
         </el-tab-pane>
@@ -94,6 +94,7 @@ export default {
   data() {
     return {
       activeName: "first",
+      isUntrusted: false,
       // 用户信息
       userInfo: {
         idcard: "-",
@@ -115,9 +116,28 @@ export default {
   },
   created() {
     this.handlePersonInfo(utilsOper.GetUserId());
+    this.handleUntrustedInfo(utilsOper.GetUserId());
   },
   methods: {
-    handleClick() {},
+    // 法院失信
+    handleUntrustedInfo(userId) {
+      let that = this;
+      service.getInfo({
+        url: "untrusted_info/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            if (
+              data.obj &&
+              (data.obj.courtcaseCnt > 0 || data.obj.dishonestCnt > 0)
+            ) {
+              that.isUntrusted = true;
+            } else {
+              that.isUntrusted = false;
+            }
+          }
+        }
+      });
+    },
     handlePersonInfo(userId) {
       let that = this;
       // 人员信息
