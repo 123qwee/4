@@ -1,5 +1,5 @@
 // 生产环境还是开发环境 production development
-const ENV = 'development';
+const ENV = 'production';
 
 
 

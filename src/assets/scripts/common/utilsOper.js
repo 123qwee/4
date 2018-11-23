@@ -175,9 +175,13 @@ const ChineseToNumber = (chnStr) => {
 };
 // 用JS获取地址栏参数的方法
 function GetQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
-  if (r != null) return unescape(r[2]);
+  // var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  // var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
+  // var r = window.location.href.match(reg);
+  var r = decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
+
+  // if (r != null) return unescape(r[2]);
+  if (r != null) return unescape(r);
   return null;
 }
 
