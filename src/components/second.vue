@@ -6,32 +6,32 @@
                 <div class="box_1_head">
                     <div>
                         <div class="head_txt">注册机构数量</div>
-                        <div class="cont">8</div>
+                        <div class="cont">{{authQueriedDetailRegisterInfo.orgCount}}</div>
                     </div>
                     <div>
                         <div class="head_txt head_level_2">第三方渠道</div>
                         <div class="head_txt">注册机构数量</div>
-                        <div class="cont">0</div>
+                        <div class="cont">{{authQueriedDetailRegisterInfo.otherCount}}</div>
                     </div>
                     <div>
                         <div class="head_txt">机构查询次数</div>
-                        <div class="cont">11</div>
+                        <div class="cont">{{authQueriedDetail.queriedDetailOrgCount}}</div>
                     </div>
                 </div>
                 <div class="tab_head">机构查询历史</div>
                 <div class="tab">
                     <el-table :data="tableData" style="width: 100%">
-                        <el-table-column prop="date" label="查询日期">
+                        <el-table-column prop="time" label="查询日期">
                         </el-table-column>
-                        <el-table-column prop="type" label="查询机构类型">
+                        <el-table-column prop="orgType" label="查询机构类型">
                         </el-table-column>
-                        <el-table-column prop="is" label="是否为本机构">
+                        <el-table-column label="是否为本机构">
                             <template slot-scope="scope">
-                                <span>{{scope.row.is == 0 ? '是' : '否'}}</span>
+                                <span>{{scope.row.isSelf ? '是' : '否'}}</span>
                             </template>
                         </el-table-column>
                     </el-table>
-                    <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="5" layout="prev, pager, next, jumper" :total="gRecordCount">
+                    <el-pagination class="pages" ref="pager" @current-change="handleQuery_3" @size-change="handleQuery_3" :page-size="5" layout="prev, pager, next, jumper" :total="gRecordCount">
                     </el-pagination>
                 </div>
             </el-col>
@@ -39,8 +39,7 @@
                 <div class="box_2_head">
                     <div class="title">多头信息 - 机构类型</div>
                     <el-button-group>
-                        <el-button size="small">ZHENGXIN</el-button>
-                        <el-button size="small" type="primary" plain>CASH_LOAN</el-button>
+                        <el-button size="small" v-for="(item,index) in typeList" :key="index" @click="handleBtn(item)">{{item}}</el-button>
                     </el-button-group>
                 </div>
                 <div id="third_1"></div>
@@ -70,33 +69,15 @@ import barOptions2 from "./barOptions_2";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2017-01-22",
-          type: "CASH_LOAN",
-          is: 0
-        },
-        {
-          date: "2017-01-22",
-          type: "CASH_LOAN",
-          is: 0
-        },
-        {
-          date: "2017-01-22",
-          type: "CASH_LOAN",
-          is: 1
-        },
-        {
-          date: "2017-01-22",
-          type: "CASH_LOAN",
-          is: 0
-        },
-        {
-          date: "2017-01-22",
-          type: "CASH_LOAN",
-          is: 0
-        }
-      ],
+      authQueriedDetail: {
+        queriedDetailOrgCount: ""
+      },
+      authQueriedDetailRegisterInfo: {
+        orgCount: "",
+        otherCount: ""
+      },
+      typeList: [],
+      tableData: [],
       gRecordCount: 15,
 
       thirdChart1: null,
@@ -105,6 +86,7 @@ export default {
       barOptions2: _.cloneDeep(barOptions2)
     };
   },
+  created() {},
   mounted() {
     let that = this;
 
@@ -117,35 +99,158 @@ export default {
     let thirdChartDom3 = this.$el.querySelector("#third_3");
     that.thirdChart3 = this.$echarts.init(thirdChartDom3);
 
-    that.handleSecondChart1();
-    that.handleSecondChart2();
-    that.handleSecondChart3();
+    this.handleQuery_1(utilsOper.GetUserId());
   },
   methods: {
-    handleQuery() {},
-    handleSecondChart1() {
+    // 机构查询次数
+    handleQuery_1(userId) {
       let that = this;
-      let aa = Object.assign(that.barOptions2, {});
-      aa.title.text = "多平台借贷分析-近X天贷款申请次数";
+      service.getInfo({
+        url: "auth_queried_detail/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.authQueriedDetail = data.obj;
+            that.handleQuery_2();
+            that.handleQuery_3();
+          }
+        }
+      });
+    },
+    // 多头信息-注册
+    handleQuery_2() {
+      let that = this;
+      service.getInfo({
+        url: "auth_queried_detail_register_info/" + that.authQueriedDetail.id,
+        successFunc: data => {
+          if (data.code == 200) {
+            // 多头信息-注册
+            that.authQueriedDetailRegisterInfo = data.obj;
+            that.typeList = data.obj.orgTypes.split(",");
 
-      that.thirdChart1.setOption(aa);
-      that.thirdChart1.resize();
+            that.handleSecondChart1(that.typeList[0]);
+            that.handleSecondChart2();
+          }
+        }
+      });
+    },
+    // 多头信息-表格
+    handleQuery_3() {
+      popupOper.showLoading();
+      let that = this,
+        page,
+        pageSize;
+      if (this.$refs["pager"] == undefined) {
+        page = 1;
+        pageSize = 5;
+      } else {
+        page = this.$refs["pager"].internalCurrentPage;
+        pageSize = this.$refs["pager"].internalPageSize;
+      }
+      service.getInfo({
+        url: "auth_queried_detail_queried_infos/" + that.authQueriedDetail.id,
+        data: {
+          pageNum: page,
+          pageSize: pageSize
+        },
+        successFunc: data => {
+          if (data.code == 200) {
+            // 多头信息-注册
+            that.gRecordCount = data.count;
+            that.tableData = data.list;
+          }
+          popupOper.closeLoading();
+        }
+      });
+    },
+    handleBtn(type) {
+      this.handleSecondChart1(type);
+    },
+    handleQuery() {},
+    handleSecondChart1(type) {
+      let that = this;
+      popupOper.showLoading();
+      service.getInfo({
+        url: "auth_queried_detail_queried_analyze/" + that.authQueriedDetail.id,
+        successFunc: data => {
+          if (data.code == 200) {
+            let itemOptions = Object.assign(that.barOptions2, {});
+            itemOptions.title.text = "多平台借贷分析-近X天贷款申请次数";
+            itemOptions.xAxis.data = ["15天", "1个月", "3个月", "6个月"];
+            let seriesData = {};
+            _.map(_.find(data.list, { orgType: type }), (val, key) => {
+              seriesData[key] = val ? val : 0;
+            });
+            itemOptions.series[0].data = [
+              seriesData.loanCnt15d,
+              seriesData.loanCnt30d,
+              seriesData.loanCnt90d,
+              seriesData.loanCnt180d
+            ];
+            that.thirdChart1.setOption(itemOptions);
+            that.thirdChart1.resize();
+          }
+          popupOper.closeLoading();
+        }
+      });
     },
     handleSecondChart2() {
       let that = this;
-      let aa = Object.assign(that.barOptions2, {});
-      aa.title.text = "借贷多头-近X天贷款的机构数";
+      popupOper.showLoading();
+      service.getInfo({
+        url: "auth_queried_detail_loan_info/" + that.authQueriedDetail.id,
+        successFunc: data => {
+          if (data.code == 200) {
+            // 多平台借贷分析-近X天贷款的机构数
+            let itemOptions = Object.assign(that.barOptions2, {});
+            itemOptions.title.text = "多平台借贷分析-近X天贷款的机构数";
+            itemOptions.xAxis.data = [
+              "借贷机构数(去重)",
+              "15天",
+              "1个月",
+              "3个月",
+              "6个月"
+            ];
+            let seriesData = {};
+            _.map(data.list, (val, key) => {
+              seriesData[key] = val ? val : 0;
+            });
+            itemOptions.series[0].data = [
+              seriesData.loanOrgCnt,
+              seriesData.loanOrgCnt15d,
+              seriesData.loanOrgCnt30d,
+              seriesData.loanOrgCnt90d,
+              seriesData.loanOrgCnt180d
+            ];
+            that.thirdChart2.setOption(itemOptions);
+            that.thirdChart2.resize();
+            // 借贷多头-近X天贷款的次数
 
-      that.thirdChart2.setOption(aa);
-      that.thirdChart2.resize();
-    },
-    handleSecondChart3() {
-      let that = this;
-      let { ...aa } = that.barOptions2;
-      aa.title.text = "借贷多头-近X天贷款的次数";
-
-      that.thirdChart3.setOption(aa);
-      that.thirdChart3.resize();
+            let itemOptions2 = Object.assign(that.barOptions2, {});
+            itemOptions2.title.text = "多平台借贷分析-近X天贷款的机构数";
+            itemOptions2.xAxis.data = [
+              "借贷次数",
+              "15天",
+              "1个月",
+              "3个月",
+              "6个月"
+            ];
+            let seriesData2 = {};
+            _.map(data.list, (val, key) => {
+              seriesData2[key] = val ? val : 0;
+            });
+            itemOptions2.series[0].data = [
+              seriesData2.loanOrgCnt,
+              seriesData2.loanCnt15d,
+              seriesData2.loanCnt30d,
+              seriesData2.loanCnt90d,
+              seriesData2.loanCnt180d
+            ];
+            that.thirdChart3.setOption(itemOptions2);
+            that.thirdChart3.resize();
+          }
+          popupOper.closeLoading();
+        }
+      });
     }
   }
 };

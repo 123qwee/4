@@ -3,181 +3,346 @@
     <div class="title">变更信息</div>
     <div class="btn_group">
         <el-button-group>
-            <el-button size="small" :class="btnIndex == '1' ? 'btn_act' : ''" data-type="1" @click="hadnleBtn(1)">身份证存疑</el-button>
-            <el-button size="small" :class="btnIndex == '2' ? 'btn_act' : ''" data-type="2" @click="hadnleBtn(2)">手机存疑</el-button>
-            <el-button size="small" :class="btnIndex == '3' ? 'btn_act' : ''" data-type="3" @click="hadnleBtn(3)">设备指纹</el-button>
+            <el-button size="small" :class="btnIndex == '0' ? 'btn_act' : ''" data-type="1" @click="hadnleBtn(0)">身份证存疑</el-button>
+            <el-button size="small" :class="btnIndex == '1' ? 'btn_act' : ''" data-type="2" @click="hadnleBtn(1)">手机存疑</el-button>
+            <el-button size="small" :class="btnIndex == '2' ? 'btn_act' : ''" data-type="3" @click="hadnleBtn(2)">设备指纹</el-button>
         </el-button-group>
     </div>
-    <div class="btn_3" v-if="btnIndex == '3'">
+    <div class="btn_3" v-if="btnIndex == '2'">
         <div>
             <div>使用过的设备数</div>
-            <div>3</div>
+            <div>{{suspiciousDevice.otherDevicesCnt}}</div>
         </div>
         <div>
             <div>手机号码使用过的设备数</div>
-            <div>3</div>
+            <div>{{suspiciousDevice.mobileOtherDevicesCnt}}</div>
         </div>
         <div>
             <div>身份证号码使用过的设备数</div>
-            <div>3</div>
+            <div>{{suspiciousDevice.idcardOtherDevicesCnt}}</div>
         </div>
     </div>
     <el-row :gutter="20">
         <el-col :span="6" class="left">
-            <template v-if="btnIndex == '1'">
-                <div class="box active" @click="handleClickBox">
+            <template v-if="btnIndex == '0'">
+                <div class="box active" data-index= "1_1" @click="handleClickBox">
                     <div>身份证存疑姓名数</div>
-                    <div>6</div>
+                    <div>{{suspiciousIdcard.otherNamesCnt}}</div>
                 </div>
-                <div class="box" data-index="2" @click="handleClickBox">
+                <div class="box" data-index="1_2" @click="handleClickBox">
                     <div>身份证存疑手机号码数</div>
                     <div>
-                        <div>61</div>
+                        <div>{{suspiciousIdcard.otherMobilesCnt}}</div>
                         <div>处黑手机号码数: 
-                            <span>0</span>
+                            <span>{{suspiciousIdcard.otherMobilesBlackCnt}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "1_3" @click="handleClickBox">
                     <div>提供数据的机构数</div>
-                    <div>8</div>
+                    <div>{{suspiciousIdcard.informationSourcesCnt}}</div>
                 </div>
             </template>
-            <template v-else-if="btnIndex == '2'">
-                <div class="box active" @click="handleClickBox">
+            <template v-else-if="btnIndex == '1'">
+                <div class="box active" data-index= "2_1" @click="handleClickBox">
                     <div>手机存疑姓名数</div>
-                    <div>28</div>
+                    <div>{{suspiciousMobile.otherNamesCnt}}</div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "2_2" @click="handleClickBox">
                     <div>手机存疑身份证号码数</div>
                     <div>
-                        <div>21</div>
+                        <div>{{suspiciousMobile.otherIdcardsCnt}}</div>
                         <div>处黑身份证号码数: 
-                            <span>1</span>
+                            <span>{{suspiciousMobile.otherIdcardsBlackCnt}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "2_3" @click="handleClickBox">
                     <div>提供数据的机构数</div>
-                    <div>14</div>
+                    <div>{{suspiciousMobile.informationSourcesCnt}}</div>
                 </div>
             </template>
-            <template v-else="btnIndex == '3'">
-                <div class="box active" @click="handleClickBox">
+            <template v-else="btnIndex == '2'">
+                <div class="box active" data-index= "3_1" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他姓名数</div>
-                    <div>1</div>
+                    <div>{{suspiciousDevice.otherNamesCnt}}</div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "3_2" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他手机号码数</div>
                     <div>
-                        <div>1</div>
+                        <div>{{suspiciousDevice.otherMobilesCnt}}</div>
                         <div>处黑手机号码数: 
-                            <span>0</span>
+                            <span>{{suspiciousDevice.otherMobilesCnt}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "3_3" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他身份证号码数</div>
                     <div>
-                        <div>1</div>
+                        <div>{{suspiciousDevice.otherIdcardsCnt}}</div>
                         <div>处黑身份证号码数: 
-                            <span>0</span>
+                            <span>{{suspiciousDevice.otherIdcardsBlackCnt}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="box" @click="handleClickBox">
+                <div class="box" data-index= "3_4" @click="handleClickBox">
                     <div>提供数据的机构数</div>
-                    <div>8</div>
+                    <div>{{suspiciousDevice.informationSourcesCnt}}</div>
                 </div>
             </template>
         </el-col>
         <el-col :span="17" class="right">
-            <template>
                 <div class="tab_title">{{tab_title}}</div>
-                <el-table :data="tableData" style="width:100%;">
-                    <el-table-column prop="a" label="最后使用时间"></el-table-column>
-                    <el-table-column prop="b" label="手机号"></el-table-column>
-                    <el-table-column prop="c" label="号码归属地"></el-table-column>
-                    <el-table-column prop="d" label="运营商"></el-table-column>
-                    <el-table-column prop="e" label="是否命中黑灰名单"></el-table-column>
-                </el-table>
-                <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="2" layout="prev, pager, next, jumper" :total="gRecordCount">
+                <!-- 身份证存疑 -->
+                  <el-table v-if="btnIndex == '0' && leftButtonIndex == '1_1' " :data="tableData" style="width:100%;" key="1_1">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="name" label="姓名"></el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '0' && leftButtonIndex == '1_2' " :data="tableData" style="width:100%;" key="1_2">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="mobile" label="手机号"></el-table-column>
+                    <el-table-column prop="carrier" label="运营商"></el-table-column>
+                    <el-table-column prop="mobileLocation" label="号码归属地"></el-table-column>
+                    <el-table-column label="是否命中黑灰名单">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.isblack ? "是" : "否"}}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '0' && leftButtonIndex == '1_3' " :data="tableData" style="width:100%;" key="1_3">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                  </el-table>
+
+
+                  <!-- 手机号存疑 -->
+                  <el-table v-if="btnIndex == '1' && leftButtonIndex == '2_1' " :data="tableData" style="width:100%;" key="2_1">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="name" label="姓名"></el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '1' && leftButtonIndex == '2_2' " :data="tableData" style="width:100%;" key="2_2">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="idcard" label="身份证号"></el-table-column>
+                    <el-table-column label="是否命中黑灰名单">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.isblack ? "是" : "否"}}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '1' && leftButtonIndex == '2_3' " :data="tableData" style="width:100%;" key="2_3">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                  </el-table>
+
+                  <!-- 设备指纹 -->
+                  <el-table v-if="btnIndex == '2' && leftButtonIndex == '3_1' " :data="tableData" style="width:100%;" key="2_1">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="name" label="姓名"></el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '2' && leftButtonIndex == '3_2' " :data="tableData" style="width:100%;" key="2_2">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="mobile" label="手机号"></el-table-column>
+                    <el-table-column prop="mobileLocation" label="号码归属地"></el-table-column>
+                    <el-table-column prop="carrier" label="运营商"></el-table-column>
+                    <el-table-column label="是否命中黑灰名单">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.isblack ? "是" : "否"}}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '2' && leftButtonIndex == '3_3' " :data="tableData" style="width:100%;" key="2_3">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="idcard" label="身份证号"></el-table-column>
+                    <el-table-column label="是否命中黑灰名单">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.isblack ? "是" : "否"}}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-table v-if="btnIndex == '2' && leftButtonIndex == '3_4' " :data="tableData" style="width:100%;" key="2_3">
+                    <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
+                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                  </el-table>
+                <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="10" layout="prev, pager, next, jumper" :total="gRecordCount">
                 </el-pagination>
-            </template>
         </el-col>
     </el-row>
 </div>
 </template>
 <script>
+var urlList = [
+  {
+    "1_1": "suspicious_idcard_other_names/",
+    "1_2": "suspicious_idcard_other_mobiles/",
+    "1_3": "suspicious_idcard_information_sources/"
+  },
+  {
+    "2_1": "suspicious_mobile_other_names/",
+    "2_2": "suspicious_mobile_other_idcards/",
+    "2_3": "suspicious_mobile_information_sources/"
+  },
+  {
+    "3_1": "suspicious_device_other_names/",
+    "3_2": "suspicious_device_other_mobiles/",
+    "3_3": "suspicious_device_other_idcards/",
+    "3_4": "suspicious_device_information_sources/"
+  }
+];
+import service from "./service";
 export default {
   components: {},
   data() {
     return {
-      tableData: [
-        {
-          a: "2017-02-24 01:04:10",
-          b: "15940718467",
-          c: "辽宁",
-          d: "中国移动",
-          e: "	否"
-        },
-        {
-          a: "2017-02-24 01:04:10",
-          b: "15940718467",
-          c: "辽宁",
-          d: "中国移动",
-          e: "	否"
-        },
-        {
-          a: "2017-02-24 01:04:10",
-          b: "15940718467",
-          c: "辽宁",
-          d: "中国移动",
-          e: "	否"
-        },
-        {
-          a: "2017-02-24 01:04:10",
-          b: "15940718467",
-          c: "辽宁",
-          d: "中国移动",
-          e: "	否"
-        },
-        {
-          a: "2017-02-24 01:04:10",
-          b: "15940718467",
-          c: "辽宁",
-          d: "中国移动",
-          e: "	否"
-        }
-      ],
+      suspiciousIdcard: {
+        otherNamesCnt: 0,
+        otherMobilesCnt: 0,
+        otherMobilesBlackCnt: 0,
+        informationSourcesCnt: 0
+      },
+      suspiciousMobile: {
+        otherNamesCnt: "0", //	身份证存疑姓名数
+        otherIdcardsCnt: "0", //	身份证存疑身份证数
+        otherIdcardsBlackCnt: "0", //	身份证存疑触黑身份证数
+        informationSourcesCnt: "0" //	提供数据的机构数
+      },
+      suspiciousDevice: {
+        otherDevicesCnt: "0", //	使用过的设备数
+        mobileOtherDevicesCnt: "0", //	手机号码使用过的设备数
+        idcardOtherDevicesCnt: "0", //	身份证号码使用过的设备数
+        informationSourcesCnt: "0", //	提供数据的机构数
+        otherNamesCnt: "0", //	使用过的设备上登陆的其他姓名数
+        otherMobilesCnt: "0", //	使用过的设备上登陆的其他手机号码数
+        otherMobilesBlackCnt: "0", //	使用过的设备上登陆的其他触黑手机号码数
+        otherIdcardsCnt: "0", //	使用过的设备上登陆的其他身份证号码数
+        otherIdcardsBlackCnt: "0" //	使用过的设备上登陆的其他触黑身份证号码数
+      },
+      tableData: [],
       gRecordCount: 15,
-      btnIndex: 1,
-      tab_title:"身份证存疑手机号码",
+      btnIndex: 0, //顶部三个按钮
+      leftButtonIndex: "1_1", // 左侧三个按钮
+      tab_title: "身份证存疑手机号码"
     };
+  },
+  created() {
+    this.handleSuspiciousIdcard();
   },
   mounted() {},
   watch: {},
   methods: {
-    handleQuery() {},
     // 点击按钮
-    // 1：身份证存疑
-    // 2：手机存疑
-    // 3：设备指纹
+    // 0：身份证存疑
+    // 1：手机存疑
+    // 2：设备指纹
     hadnleBtn(index) {
       this.btnIndex = index;
-      //   debugger
+      if (index == "0") {
+        this.handleSuspiciousIdcard();
+        this.leftButtonIndex = "1_1";
+      } else if (index == "1") {
+        this.handleSuspiciousMobile();
+        this.leftButtonIndex = "2_1";
+      } else {
+        this.handleSuspiciousDevice();
+        this.leftButtonIndex = "3_1";
+      }
     },
     // 左侧选项点击
     handleClickBox(e) {
       $(".active").removeClass("active");
       $(e.currentTarget).addClass("active");
-      this.tab_title = $($(e.currentTarget).children()[0]).text().slice(0,-1);
+      this.tab_title = $($(e.currentTarget).children()[0])
+        .text()
+        .slice(0, -1);
+      this.leftButtonIndex = $(e.currentTarget).attr("data-index");
+      this.handleQuery();
+    },
+    // 身份证存疑
+    handleSuspiciousIdcard() {
+      let that = this;
+      service.getInfo({
+        url: "suspicious_idcard/" + utilsOper.GetUserId(),
+        successFunc: data => {
+          if (data.code == 200) {
+            that.suspiciousIdcard = data.obj;
+            that.handleQuery();
+          }
+        }
+      });
+    },
+    // 手机存疑
+    handleSuspiciousMobile() {
+      let that = this;
+      service.getInfo({
+        url: "suspicious_mobile/" + utilsOper.GetUserId(),
+        successFunc: data => {
+          if (data.code == 200) {
+            that.suspiciousMobile = data.obj;
+            that.handleQuery();
+          }
+        }
+      });
+    },
+    // 设备存疑
+    handleSuspiciousDevice() {
+      let that = this;
+      service.getInfo({
+        url: "suspicious_device/" + utilsOper.GetUserId(),
+        successFunc: data => {
+          if (data.code == 200) {
+            that.suspiciousDevice = data.obj;
+            that.handleQuery();
+          }
+        }
+      });
+    },
+    handleQuery() {
+      let that = this,
+        url,
+        id,
+        page,
+        pageSize;
+      if (this.$refs["pager"] == undefined) {
+        page = 1;
+        pageSize = 10;
+      } else {
+        page = this.$refs["pager"].internalCurrentPage;
+        pageSize = this.$refs["pager"].internalPageSize;
+      };
+      
+      url = urlList[this.btnIndex][this.leftButtonIndex];
+
+      if (this.btnIndex == "0") {
+        id = this.suspiciousIdcard.id;
+      } else if (this.btnIndex == "1") {
+        id = this.suspiciousMobile.id;
+      } else {
+        id = this.suspiciousDevice.id;
+      }
+      console.log(url,id)
+      popupOper.showLoading();
+      service.getInfo({
+        url: url + id,
+        data: {
+          pageNum: page,
+          pageSize: pageSize
+        },
+        successFunc: data => {
+          if (data.code == 200) {
+            that.tableData = data.list;
+            that.gRecordCount = data.count;
+          }
+          popupOper.closeLoading();
+        }
+      });
     }
   }
 };
 </script>
 <style lang='scss' scoped >
 .sixth {
+  .el-table th {
+    background: #f7f7f7;
+  }
   .title {
     font-size: 14px;
     text-overflow: ellipsis;

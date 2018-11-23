@@ -43,7 +43,7 @@ export default {
   series: [{
     name: '2011年',
     type: 'bar',
-    data: [3, 6, 1, 4, 9, 5],
+    data: [],
     label: {
       normal: {
         show: true,

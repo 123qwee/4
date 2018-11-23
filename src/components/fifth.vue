@@ -3,22 +3,26 @@
     <div class="title">设备指纹风险</div>
     <div class="tab">
         <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="date" label="查询日期">
+            <el-table-column prop="loanCnt" label="对应的借贷APP数量">
             </el-table-column>
-            <el-table-column prop="type" label="查询机构类型">
+            <el-table-column prop="loanCntRatio" label="对应的借贷APP数量占比">
             </el-table-column>
-            <el-table-column prop="is" label="是否为本机构">
-                <template slot-scope="scope">
-                    <span>{{scope.row.is == 0 ? '是' : '否'}}</span>
-                </template>
+            <el-table-column prop="consumptionCnt" label="对应的消费分期APP数量">
+            </el-table-column>
+            <el-table-column prop="consumptionCntRatio" label="对应的消费分期APP数量占比">
+            </el-table-column>
+            <el-table-column prop="lotteryCnt" label="对应的彩票APP数量">
+            </el-table-column>
+            <el-table-column prop="lotteryCntRatio" label="对应的彩票APP数量占比">
             </el-table-column>
         </el-table>
-        <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="5" layout="prev, pager, next, jumper" :total="gRecordCount">
+        <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="10" layout="prev, pager, next, jumper" :total="gRecordCount">
         </el-pagination>
     </div>
 </div>
 </template>
 <script>
+import service from "./service";
 export default {
   components: {},
   data() {
@@ -49,12 +53,41 @@ export default {
       ]
     };
   },
+  created() {
+    this.handleQuery();
+  },
   mounted() {
     let that = this;
   },
   watch: {},
   methods: {
-    handleQuery() {}
+    handleQuery() {
+      let that = this,
+        page,
+        pageSize;
+      if (this.$refs["pager"] == undefined) {
+        page = 1;
+        pageSize = 10;
+      } else {
+        page = this.$refs["pager"].internalCurrentPage;
+        pageSize = this.$refs["pager"].internalPageSize;
+      };
+      popupOper.showLoading();
+      service.getInfo({
+        url: "api_scorpion_wand_risk_device/" + utilsOper.GetUserId(),
+        data: {
+          pageNum: page,
+          pageSize: pageSize
+        },
+        successFunc: data => {
+          if (data.code == 200) {
+            that.tableData = data.list;
+            that.gRecordCount = data.count;
+          }
+          popupOper.closeLoading();
+        }
+      });
+    }
   }
 };
 </script>

@@ -41,7 +41,7 @@ export default {
     }
   },
   series: [{
-    data: [120, 200, 150, 80],
+    data: [],
     type: 'bar',
     color: function (params) {
       var colorList = ["#3AA1FF", "#4CCA73", "#F9D337", "#415088","#FF841C","#FF4236"];

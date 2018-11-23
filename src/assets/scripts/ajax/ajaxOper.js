@@ -15,7 +15,7 @@ const qs = require('qs');
 
 // 全局 axios 默认配置
 Vue.axios.defaults.baseURL = constants.SERVER_URL;
-Vue.axios.defaults.withCredentials = true;
+Vue.axios.defaults.withCredentials = false;
 Vue.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 /**

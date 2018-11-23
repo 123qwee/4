@@ -7,39 +7,40 @@
       <div class="title">失信情况</div>
       <div class="content">
         <div>法院执行人次数</div>
-        <div>2</div>
+        <div>{{untrustedInfo.courtcaseCnt}}</div>
         <div>失信未执行次数</div>
-        <div>2</div>
+        <div>{{untrustedInfo.dishonestCnt}}</div>
       </div>
     </el-col>
     <el-col :span="18" class="col">
       <div class="title">失信明细</div>
-        <template>
-          <div class="box_2">
-            <div class="tit">上海市浦东新区人民法院</div>
+        <template v-for="(item,index) in detailsList">
+          <div class="box_2" :key="index">
+            <div class="tit">{{item.courtName}}</div>
             <div class="add_time">
-              <span>上海</span>
-              <span>2017年07月08日</span>
+              <span>{{item.areaName}}</span>
+              <span>{{item.publishDate}}</span>
             </div>
             <div class="box_row">
               <span>执行依据文号：</span>
-              <span>(2017)沪0115执9562号</span>
+              <span>{{item.caseCode}}</span>
               <span>案号：</span>
-              <span>(2016)沪0115民初49001号</span>
+              <span>{{item.gistId}}</span>
             </div>
             <div class="box_row">
               <span>生效法律文书确定的义务：</span>
-              <span>返还人民币702909.60元及已支付的诉讼费1534.40元共计：704444元</span>
+              <span>{{item.duty}}</span>
             </div>
             <div class="box_row">
               <span>被执行人的履行性质：</span>
-              <span>全部未履行</span>
+              <span>{{item.performance}}</span>
             </div>
             <div class="box_row">
               <span>失信被执行人行为具体情形：</span>
-              <span>违反财产报告制度</span>
+              <span>{{item.disruptTypeName}}</span>
             </div>
           </div>
+          <div v-if="index % 2 == 0" :key="index + '1'" style="width: 96%;height: 1px;background: #e8e8e8;margin: 20px auto;"></div>
         </template>
       <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="2" layout="prev, pager, next, jumper" :total="gRecordCount">
       </el-pagination>
@@ -53,13 +54,61 @@ export default {
   components: {},
   data() {
     return {
-      gRecordCount: 15
+      gRecordCount: 15,
+      untrustedInfo: {
+        courtcaseCnt: "0",
+        dishonestCnt: "0"
+      },
+      detailsList: []
     };
+  },
+  created() {
+    this.handleUntrustedInfo(utilsOper.GetUserId());
   },
   mounted() {},
   watch: {},
   methods: {
-    handleQuery() {}
+    // 法院失信
+    handleUntrustedInfo(userId) {
+      let that = this;
+      service.getInfo({
+        url: "untrusted_info/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.untrustedInfo = data.obj;
+            that.handleQuery();
+          }
+        }
+      });
+    },
+    handleQuery() {
+      popupOper.showLoading();
+      let that = this,
+        page,
+        pageSize;
+      if (this.$refs["pager"] == undefined) {
+        page = 1;
+        pageSize = 2;
+      } else {
+        page = this.$refs["pager"].internalCurrentPage;
+        pageSize = this.$refs["pager"].internalPageSize;
+      }
+      service.getInfo({
+        url: "untrusted_info_dishonest_detail_info/" + that.untrustedInfo.id,
+        data: {
+          pageNum: page,
+          pageSize: pageSize
+        },
+        successFunc: data => {
+          if (data.code == 200) {
+            // 多头信息-注册
+            that.gRecordCount = data.count;
+            that.detailsList = data.list;
+          }
+          popupOper.closeLoading();
+        }
+      });
+    }
   }
 };
 </script>

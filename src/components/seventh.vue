@@ -13,7 +13,8 @@
                   <div>手机和姓名是否在黑名单</div>
                 </div>
                 <div>
-                  <i class="el-icon-circle-close-outline"></i>
+                  <i v-if="! blackInfo.mobileNameInBlacklist" class="el-icon-circle-close-outline"></i>
+                  <i v-else class="el-icon-circle-check-outline"></i>
                 </div>
               </div>
               <div>
@@ -22,7 +23,7 @@
                   <div class="line"></div>
                   <div>手机和姓名黑名单更新时间</div>
                 </div>
-                <div>-</div>
+                <div>{{blackInfo.mobileNameBlacklistUpdatedTime ? blackInfo.idcardNameBlacklistUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -31,7 +32,8 @@
                   <div>身份证和姓名是否在黑名单</div>
                 </div>
                 <div>
-                  <i class="el-icon-circle-close-outline"></i>
+                  <i v-if="! blackInfo.idcardNameInBlacklist" class="el-icon-circle-close-outline"></i>
+                  <i v-else class="el-icon-circle-check-outline"></i>
                 </div>
               </div>
               <div>
@@ -40,7 +42,7 @@
                   <div class="line"></div>
                   <div>身份证和姓名黑名单更新时间</div>
                 </div>
-                <div>-</div>
+                <div>{{blackInfo.idcardNameBlacklistUpdatedTime ? blackInfo.idcardNameBlacklistUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -48,21 +50,22 @@
                   <div>被标记的黑名单分类</div>
                 </div>
                 <div>
+                  {{blackInfo.blackTypes ? blackInfo.blackTypes : ""}}
                 </div>
               </div>
             </div>
             <div class="footer" key="1_2">
               <div>
                 <div>逾期次数</div>
-                <div>0</div>
+                <div>{{blackInfo.overdueCount}}</div>
               </div>
               <div>
                 <div>最大逾期金额(元)</div>
-                <div>0</div>
+                <div>{{blackInfo.overdueAmount}}</div>
               </div>
               <div>
                 <div>最大逾期天数</div>
-                <div>0</div>
+                <div>{{blackInfo.overdueStatus}}</div>
               </div>
             </div>
           </template>
@@ -79,7 +82,8 @@
                   <div>手机和姓名是否在灰名单</div>
                 </div>
                 <div>
-                  <i class="el-icon-circle-close-outline"></i>
+                  <i v-if="! grayInfo.mobileNameInGray" class="el-icon-circle-close-outline"></i>
+                  <i v-else class="el-icon-circle-check-outline"></i>
                 </div>
               </div>
               <div>
@@ -88,7 +92,7 @@
                   <div class="line"></div>
                   <div>手机和姓名灰名单更新时间</div>
                 </div>
-                <div>-</div>
+                <div>{{grayInfo.mobileNameGrayUpdatedTime ? blackInfo.mobileNameGrayUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -97,7 +101,8 @@
                   <div>身份证和姓名是否在灰名单</div>
                 </div>
                 <div>
-                  <i class="el-icon-circle-close-outline"></i>
+                  <i v-if="! grayInfo.idcardNameInGray" class="el-icon-circle-close-outline"></i>
+                  <i v-else class="el-icon-circle-check-outline"></i>
                 </div>
               </div>
               <div>
@@ -106,7 +111,7 @@
                   <div class="line"></div>
                   <div>身份证和姓名灰名单更新时间</div>
                 </div>
-                <div>-</div>
+                <div>{{grayInfo.idcardNameGrayUpdatedTime ? blackInfo.idcardNameGrayUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -114,21 +119,22 @@
                   <div>被标记的灰名单分类</div>
                 </div>
                 <div>
+                  {{grayInfo.grayTypes ? grayInfo.grayTypes : ""}}
                 </div>
               </div>
             </div>
             <div class="footer" key="2_2">
               <div>
                 <div>逾期次数</div>
-                <div>0</div>
+                <div>{{grayInfo.overdueCount}}</div>
               </div>
               <div>
                 <div>最大逾期金额(元)</div>
-                <div>0</div>
+                <div>{{grayInfo.overdueAmount}}</div>
               </div>
               <div>
                 <div>最大逾期天数</div>
-                <div>0</div>
+                <div>{{grayInfo.overdueStatus}}</div>
               </div>
             </div>
           </template>
@@ -138,17 +144,46 @@
 </div>
 </template>
 <script>
+import service from "./service";
 export default {
   components: {},
   data() {
     return {
-      activeName: "blackList"
+      activeName: "blackList",
+      blackInfo: {},
+      grayInfo: {}
     };
   },
   mounted() {},
   watch: {},
+  created() {
+    popupOper.showLoading();
+    this.handleBlackInfo(utilsOper.GetUserId());
+  },
   methods: {
-    handleClick() {}
+    handleClick() {},
+    handleBlackInfo(userId) {
+      let that = this;
+      // 黑名单
+      service.getInfo({
+        url: "black_info_detail/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            popupOper.closeLoading();
+            that.blackInfo = data.obj;
+          }
+        }
+      });
+      // 灰名单
+      service.getInfo({
+        url: "gray_info_detail/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.grayInfo = data.obj;
+          }
+        }
+      });
+    }
   }
 };
 </script>

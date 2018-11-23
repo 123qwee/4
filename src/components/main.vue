@@ -8,24 +8,24 @@
       </el-col>
       <el-col :span="14" class="col">
         <div class="user_name">
-          <span>卢*</span>
-          <span>男</span>
-          <span>25</span>
+          <span>{{userInfo.name}}</span>
+          <span>{{userInfo.gender}}</span>
+          <span>{{userInfo.age}}</span>
         </div>
           <div class="user_font">
             <span class="tit">身份证号：</span>
-            <span class="val"> 33032719911111**** | 浙江省/温州市/苍南县</span>
+            <span class="val">{{userInfo.idcard}} | {{userInfo.idcardLocation}}</span>
             <span class="status">有效</span>
           </div>
           <div class="user_font">
             <span class="tit">手机号码：</span>
-            <span class="val">1371111**** | 浙江/杭州</span>
+            <span class="val">{{userInfo.mobile}} | {{userInfo.mobileLocation}}</span>
             <span class="tit padding_left_40">联系邮箱：</span>
-            <span class="val">111111111@qq.com</span>
+            <span class="val">{{userInfo.email}}</span>
           </div>
           <div class="user_font">
             <span class="tit">是否导入过运营商数据：</span>
-            <span class="val">是</span>
+            <span class="val">{{verification.hasCarrierData ? "是" : "否"}}</span>
           </div>
       </el-col>
       <el-col :span="8" class="col col_3">
@@ -35,7 +35,7 @@
           </div>
           <div class="box">
             <div>涉黑评分</div>
-            <div>91</div>
+            <div>{{mobileInfo.matchScore ? mobileInfo.matchScore : '-'}}</div>
           </div>
           <div class="box">
             <div>失信情况</div>
@@ -79,6 +79,8 @@ import vFourth from "./fourth";
 import vFifth from "./fifth";
 import vSixth from "./sixth";
 import vSeventh from "./seventh";
+import service from "./service";
+
 export default {
   components: {
     vFirst,
@@ -91,11 +93,62 @@ export default {
   },
   data() {
     return {
-      activeName: "seventh"
+      activeName: "first",
+      // 用户信息
+      userInfo: {
+        idcard: "-",
+        idcardLocation: "-",
+        mobile: "-",
+        carrier: "-",
+        mobileLocation: "-",
+        name: "-",
+        age: "-",
+        gender: "-",
+        email: "-"
+      },
+      verification: {
+        hasCarrierData: "-", //用户是否导入过运营商数据
+        hasOnlinebankData: "-" //用户是否导入过网银信用卡数据
+      },
+      mobileInfo: {}
     };
   },
+  created() {
+    this.handlePersonInfo(utilsOper.GetUserId());
+  },
   methods: {
-    handleClick() {}
+    handleClick() {},
+    handlePersonInfo(userId) {
+      let that = this;
+      // 人员信息
+      service.getInfo({
+        url: "person_info/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.userInfo = data.obj;
+          }
+        }
+      });
+      // 认证信息
+      service.getInfo({
+        url: "verification_info/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.verification = data.obj;
+          }
+        }
+      });
+      // 手机信息
+      service.getInfo({
+        url: "mobile_info/" + userId,
+        successFunc: data => {
+          if (data.code == 200) {
+            that.mobileInfo = data.obj;
+            this.$bus.$emit("busInfoId", that.mobileInfo.id.toString());
+          }
+        }
+      });
+    }
   }
 };
 </script>

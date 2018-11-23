@@ -58,6 +58,19 @@ import 'echarts/lib/component/dataZoom';
 // 2.7 设置jQuery 全局变量
 import $ from 'jquery';
 window.jQuery = window.$ = $;
+// 2.8 全局声明
+import constants from './../static/constants.js';
+window.constants = constants;
+// 2.9 公共方法
+import utilsOper from './assets/scripts/common/utilsOper.js'
+window.utilsOper = utilsOper;
+// 2.10 提示框
+import popupOper from './assets/scripts/common/popupOper.js'
+window.popupOper = popupOper;
+
+// 3.2 引入非父子组件间交互组件EventBus
+import Bus from './assets/scripts/common/EventBus.js'
+Vue.prototype.$bus = Bus
 
 // 3.1 引入根组件
 import App from './App'
@@ -66,6 +79,6 @@ import App from './App'
 import router from './router'
 /* eslint-disable no-new */
 window.rootVm = new Vue({
-    router,
-    render: h => h(App)
+  router,
+  render: h => h(App)
 }).$mount('#app')
