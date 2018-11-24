@@ -1,7 +1,7 @@
 <template>
 <div class="seventh">
   <div class="title">黑名单信息</div>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
+  <el-tabs v-model="activeName">
       <el-tab-pane label="黑名单信息" name="blackList">
         <transition-group name="animation_left_right">
           <template v-if="activeName == 'blackList'">
@@ -13,8 +13,8 @@
                   <div>手机和姓名是否在黑名单</div>
                 </div>
                 <div>
-                  <i v-if="! blackInfo.mobileNameInBlacklist" class="el-icon-circle-close-outline"></i>
-                  <i v-else class="el-icon-circle-check-outline"></i>
+                  <i v-if="! blackInfo.mobileNameInBlacklist" class="el-icon-circle-close-outline red"></i>
+                  <i v-else class="el-icon-circle-check-outline green"></i>
                 </div>
               </div>
               <div>
@@ -32,8 +32,8 @@
                   <div>身份证和姓名是否在黑名单</div>
                 </div>
                 <div>
-                  <i v-if="! blackInfo.idcardNameInBlacklist" class="el-icon-circle-close-outline"></i>
-                  <i v-else class="el-icon-circle-check-outline"></i>
+                  <i v-if="! blackInfo.idcardNameInBlacklist" class="el-icon-circle-close-outline red"></i>
+                  <i v-else class="el-icon-circle-check-outline green"></i>
                 </div>
               </div>
               <div>
@@ -65,7 +65,7 @@
               </div>
               <div>
                 <div>最大逾期天数</div>
-                <div>{{blackInfo.overdueStatus}}</div>
+                <div>{{utilsNameConversion(2,blackInfo.overdueStatus)}}</div>
               </div>
             </div>
           </template>
@@ -82,8 +82,8 @@
                   <div>手机和姓名是否在灰名单</div>
                 </div>
                 <div>
-                  <i v-if="! grayInfo.mobileNameInGray" class="el-icon-circle-close-outline"></i>
-                  <i v-else class="el-icon-circle-check-outline"></i>
+                  <i v-if="! grayInfo.mobileNameInGray" class="el-icon-circle-close-outline red"></i>
+                  <i v-else class="el-icon-circle-check-outline green"></i>
                 </div>
               </div>
               <div>
@@ -92,7 +92,7 @@
                   <div class="line"></div>
                   <div>手机和姓名灰名单更新时间</div>
                 </div>
-                <div>{{grayInfo.mobileNameGrayUpdatedTime ? blackInfo.mobileNameGrayUpdatedTime : '-'}} </div>
+                <div>{{grayInfo.mobileNameGrayUpdatedTime ? grayInfo.mobileNameGrayUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -101,8 +101,8 @@
                   <div>身份证和姓名是否在灰名单</div>
                 </div>
                 <div>
-                  <i v-if="! grayInfo.idcardNameInGray" class="el-icon-circle-close-outline"></i>
-                  <i v-else class="el-icon-circle-check-outline"></i>
+                  <i v-if="! grayInfo.idcardNameInGray" class="el-icon-circle-close-outline red"></i>
+                  <i v-else class="el-icon-circle-check-outline green"></i>
                 </div>
               </div>
               <div>
@@ -111,7 +111,7 @@
                   <div class="line"></div>
                   <div>身份证和姓名灰名单更新时间</div>
                 </div>
-                <div>{{grayInfo.idcardNameGrayUpdatedTime ? blackInfo.idcardNameGrayUpdatedTime : '-'}} </div>
+                <div>{{grayInfo.idcardNameGrayUpdatedTime ? grayInfo.idcardNameGrayUpdatedTime : '-'}} </div>
               </div>
               <div>
                 <div>
@@ -134,7 +134,7 @@
               </div>
               <div>
                 <div>最大逾期天数</div>
-                <div>{{grayInfo.overdueStatus}}</div>
+                <div>{{utilsNameConversion(2,grayInfo.overdueStatus)}}</div>
               </div>
             </div>
           </template>
@@ -161,7 +161,9 @@ export default {
     this.handleBlackInfo(utilsOper.GetUserId());
   },
   methods: {
-    handleClick() {},
+    utilsNameConversion(type,name) {
+      return utilsOper.nameConversion(type,name);
+    },
     handleBlackInfo(userId) {
       let that = this;
       // 黑名单
@@ -210,10 +212,15 @@ export default {
         align-items: center;
       }
       &:last-child {
+        i.green {
+          color: green;
+        }
+        i.red {
+          color: #f5474a;
+        }
         i {
           font-size: 12px;
           top: -3px;
-          color: #f5474a;
           line-height: 32px;
           font-size: 18px;
         }

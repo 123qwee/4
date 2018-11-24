@@ -192,6 +192,48 @@ function GetUserId() {
     return GetQueryString("userId");
   }
 }
+// 名称转换
+function nameConversion(type, name) {
+  let data_1 = {
+    'ZHENGXIN': '征信机构',
+    'DATA_PLATFORM': '数据平台',
+    'BANK': '银行',
+    'CUSTOMER_FINANCE': '消费金融',
+    'CASH_LOAN': '现金贷',
+    'P2P': 'P2P理财',
+    'CREDITPAY': '信用支付',
+    'CONSUMSTAGE': '消费分期',
+    'COMPENSATION': '信用卡代偿',
+    'DIVERSION': '导流平台',
+    '其它': '其它',
+    'CHINA_UNICOM':'中国联通',    
+    'CHINA_MOBILE':'中国移动',
+    "CHINA_TELECOM":"中国电信",
+  };
+  let data_2 = {
+    'M0': '0-15天',
+    'M1': '16-30天',
+    'M2': '31-60天',
+    'M3': '61-90天',
+    'M4': '91-120天',
+    'M5': '121-150天',
+    'M6': '151-180天',
+    'M6+': '大于180天',
+  };
+  let obj = {};
+  if(type == 1){
+    obj = data_1;
+  }else{
+    obj = data_2;
+  }
+  if (obj[name]) {
+    return obj[name];
+  } else if (!name || name == undefined || name == null || name == "NULL") {
+    return "";
+  } else {
+    return name;
+  }
+}
 
 
 export default {
@@ -205,4 +247,5 @@ export default {
   ChineseToNumber,
   GetQueryString,
   GetUserId,
+  nameConversion,
 }

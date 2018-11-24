@@ -25,11 +25,11 @@
     <el-row :gutter="20">
         <el-col :span="6" class="left">
             <template v-if="btnIndex == '0'">
-                <div class="box active" data-index= "1_1" @click="handleClickBox">
+                <div :class="btnIndex == '0' && leftButtonIndex == '1_1' ? 'box active' : 'box'" data-index= "1_1" @click="handleClickBox">
                     <div>身份证存疑姓名数</div>
                     <div>{{suspiciousIdcard.otherNamesCnt}}</div>
                 </div>
-                <div class="box" data-index="1_2" @click="handleClickBox">
+                <div :class="btnIndex == '0' && leftButtonIndex == '1_2' ? 'box active' : 'box'" data-index="1_2" @click="handleClickBox">
                     <div>身份证存疑手机号码数</div>
                     <div>
                         <div>{{suspiciousIdcard.otherMobilesCnt}}</div>
@@ -38,17 +38,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="box" data-index= "1_3" @click="handleClickBox">
+                <div :class="btnIndex == '0' && leftButtonIndex == '1_3' ? 'box active' : 'box'" data-index= "1_3" @click="handleClickBox">
                     <div>提供数据的机构数</div>
                     <div>{{suspiciousIdcard.informationSourcesCnt}}</div>
                 </div>
             </template>
             <template v-else-if="btnIndex == '1'">
-                <div class="box active" data-index= "2_1" @click="handleClickBox">
+                <div :class="btnIndex == '1' && leftButtonIndex == '2_1' ? 'box active' : 'box'" data-index= "2_1" @click="handleClickBox">
                     <div>手机存疑姓名数</div>
                     <div>{{suspiciousMobile.otherNamesCnt}}</div>
                 </div>
-                <div class="box" data-index= "2_2" @click="handleClickBox">
+                <div :class="btnIndex == '1' && leftButtonIndex == '2_2' ? 'box active' : 'box'" data-index= "2_2" @click="handleClickBox">
                     <div>手机存疑身份证号码数</div>
                     <div>
                         <div>{{suspiciousMobile.otherIdcardsCnt}}</div>
@@ -57,17 +57,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="box" data-index= "2_3" @click="handleClickBox">
+                <div :class="btnIndex == '1' && leftButtonIndex == '2_3' ? 'box active' : 'box'" data-index= "2_3" @click="handleClickBox">
                     <div>提供数据的机构数</div>
                     <div>{{suspiciousMobile.informationSourcesCnt}}</div>
                 </div>
             </template>
             <template v-else="btnIndex == '2'">
-                <div class="box active" data-index= "3_1" @click="handleClickBox">
+                <div :class="btnIndex == '2' && leftButtonIndex == '3_1' ? 'box active' : 'box'" data-index= "3_1" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他姓名数</div>
                     <div>{{suspiciousDevice.otherNamesCnt}}</div>
                 </div>
-                <div class="box" data-index= "3_2" @click="handleClickBox">
+                <div :class="btnIndex == '2' && leftButtonIndex == '3_2' ? 'box active' : 'box'" data-index= "3_2" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他手机号码数</div>
                     <div>
                         <div>{{suspiciousDevice.otherMobilesCnt}}</div>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box" data-index= "3_3" @click="handleClickBox">
+                <div  :class="btnIndex == '2' && leftButtonIndex == '3_3' ? 'box active' : 'box'" data-index= "3_3" @click="handleClickBox">
                     <div>使用过的设备上登陆的其他身份证号码数</div>
                     <div>
                         <div>{{suspiciousDevice.otherIdcardsCnt}}</div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box" data-index= "3_4" @click="handleClickBox">
+                <div :class="btnIndex == '2' && leftButtonIndex == '3_4' ? 'box active' : 'box'" data-index= "3_4" @click="handleClickBox">
                     <div>提供数据的机构数</div>
                     <div>{{suspiciousDevice.informationSourcesCnt}}</div>
                 </div>
@@ -101,7 +101,11 @@
                   <el-table v-if="btnIndex == '0' && leftButtonIndex == '1_2' " :data="tableData" style="width:100%;" key="1_2">
                     <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
                     <el-table-column prop="mobile" label="手机号"></el-table-column>
-                    <el-table-column prop="carrier" label="运营商"></el-table-column>
+                    <el-table-column label="运营商">
+                      <template slot-scope="scope">
+                        <span>{{utilsNameConversion(1,scope.row.carrier)}}</span>
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="mobileLocation" label="号码归属地"></el-table-column>
                     <el-table-column label="是否命中黑灰名单">
                       <template slot-scope="scope">
@@ -111,7 +115,11 @@
                   </el-table>
                   <el-table v-if="btnIndex == '0' && leftButtonIndex == '1_3' " :data="tableData" style="width:100%;" key="1_3">
                     <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
-                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                    <el-table-column label="机构类型">
+                      <template slot-scope="scope">
+                        <span>{{utilsNameConversion(1,scope.row.orgType)}}</span>
+                      </template>
+                    </el-table-column>
                   </el-table>
 
 
@@ -131,7 +139,11 @@
                   </el-table>
                   <el-table v-if="btnIndex == '1' && leftButtonIndex == '2_3' " :data="tableData" style="width:100%;" key="2_3">
                     <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
-                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                    <el-table-column label="机构类型">
+                      <template slot-scope="scope">
+                        <span>{{utilsNameConversion(1,scope.row.orgType)}}</span>
+                      </template>
+                    </el-table-column>
                   </el-table>
 
                   <!-- 设备指纹 -->
@@ -143,7 +155,11 @@
                     <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
                     <el-table-column prop="mobile" label="手机号"></el-table-column>
                     <el-table-column prop="mobileLocation" label="号码归属地"></el-table-column>
-                    <el-table-column prop="carrier" label="运营商"></el-table-column>
+                    <el-table-column label="运营商">
+                      <template slot-scope="scope">
+                        <span>{{utilsNameConversion(1,scope.row.carrier)}}</span>
+                      </template>
+                    </el-table-column>
                     <el-table-column label="是否命中黑灰名单">
                       <template slot-scope="scope">
                         <span>{{scope.row.isblack ? "是" : "否"}}</span>
@@ -161,7 +177,11 @@
                   </el-table>
                   <el-table v-if="btnIndex == '2' && leftButtonIndex == '3_4' " :data="tableData" style="width:100%;" key="2_3">
                     <el-table-column prop="latestUsedTime" label="最后使用时间"></el-table-column>
-                    <el-table-column prop="orgType" label="机构类型"></el-table-column>
+                    <el-table-column label="机构类型">
+                      <template slot-scope="scope">
+                        <span>{{utilsNameConversion(1,scope.row.orgType)}}</span>
+                      </template>
+                    </el-table-column>
                   </el-table>
                 <el-pagination class="pages" ref="pager" @current-change="handleQuery" @size-change="handleQuery" :page-size="10" layout="prev, pager, next, jumper" :total="gRecordCount">
                 </el-pagination>
@@ -229,6 +249,9 @@ export default {
   mounted() {},
   watch: {},
   methods: {
+    utilsNameConversion(type,name) {
+      return utilsOper.nameConversion(type, name);
+    },
     // 点击按钮
     // 0：身份证存疑
     // 1：手机存疑
@@ -248,8 +271,8 @@ export default {
     },
     // 左侧选项点击
     handleClickBox(e) {
-      $(".active").removeClass("active");
-      $(e.currentTarget).addClass("active");
+      // $(".active").removeClass("active");
+      // $(e.currentTarget).addClass("active");
       this.tab_title = $($(e.currentTarget).children()[0])
         .text()
         .slice(0, -1);
@@ -307,8 +330,8 @@ export default {
       } else {
         page = this.$refs["pager"].internalCurrentPage;
         pageSize = this.$refs["pager"].internalPageSize;
-      };
-      
+      }
+
       url = urlList[this.btnIndex][this.leftButtonIndex];
 
       if (this.btnIndex == "0") {
@@ -318,7 +341,6 @@ export default {
       } else {
         id = this.suspiciousDevice.id;
       }
-      console.log(url,id)
       popupOper.showLoading();
       service.getInfo({
         url: url + id,

@@ -24,6 +24,9 @@
                         <el-table-column prop="time" label="查询日期">
                         </el-table-column>
                         <el-table-column prop="orgType" label="查询机构类型">
+                          <template slot-scope="scope">
+                            <span>{{utilsNameConversion(1,scope.row.orgType)}}</span>
+                          </template>
                         </el-table-column>
                         <el-table-column label="是否为本机构">
                             <template slot-scope="scope">
@@ -39,7 +42,7 @@
                 <div class="box_2_head">
                     <div class="title">多头信息 - 机构类型</div>
                     <el-button-group>
-                        <el-button size="small" v-for="(item,index) in typeList" :key="index" @click="handleBtn(item)">{{item}}</el-button>
+                        <el-button size="small" v-for="(item,index) in typeList" :key="index" @click="handleBtn(item)">{{utilsNameConversion(1,item)}}</el-button>
                     </el-button-group>
                 </div>
                 <div id="third_1"></div>
@@ -102,6 +105,9 @@ export default {
     this.handleQuery_1(utilsOper.GetUserId());
   },
   methods: {
+    utilsNameConversion(type, name) {
+      return utilsOper.nameConversion(type, name);
+    },
     // 机构查询次数
     handleQuery_1(userId) {
       let that = this;
@@ -186,6 +192,15 @@ export default {
               seriesData.loanCnt90d,
               seriesData.loanCnt180d
             ];
+            itemOptions.tooltip.formatter = params => {
+              return (
+                "近" +
+                params[0].axisValueLabel +
+                "贷款的次数：" +
+                params[0].marker +
+                params[0].value
+              );
+            };
             that.thirdChart1.setOption(itemOptions);
             that.thirdChart1.resize();
           }
@@ -204,23 +219,36 @@ export default {
             let itemOptions = Object.assign(that.barOptions2, {});
             itemOptions.title.text = "多平台借贷分析-近X天贷款的机构数";
             itemOptions.xAxis.data = [
-              "借贷机构数(去重)",
+              "借贷次数",
               "15天",
               "1个月",
               "3个月",
               "6个月"
             ];
             let seriesData = {};
-            _.map(data.list, (val, key) => {
+            _.map(data.obj, (val, key) => {
               seriesData[key] = val ? val : 0;
             });
             itemOptions.series[0].data = [
-              seriesData.loanOrgCnt,
-              seriesData.loanOrgCnt15d,
-              seriesData.loanOrgCnt30d,
-              seriesData.loanOrgCnt90d,
-              seriesData.loanOrgCnt180d
+              seriesData.loanCnt,
+              seriesData.loanCnt15d,
+              seriesData.loanCnt30d,
+              seriesData.loanCnt90d,
+              seriesData.loanCnt180d
             ];
+            itemOptions.tooltip.formatter = params => {
+              if (params[0].axisValueLabel == "借贷次数") {
+                return "借贷次数：" + params[0].marker + params[0].value;
+              } else {
+                return (
+                  "近" +
+                  params[0].axisValueLabel +
+                  "贷款的次数：" +
+                  params[0].marker +
+                  params[0].value
+                );
+              }
+            };
             that.thirdChart2.setOption(itemOptions);
             that.thirdChart2.resize();
             // 借贷多头-近X天贷款的次数
@@ -228,23 +256,38 @@ export default {
             let itemOptions2 = Object.assign(that.barOptions2, {});
             itemOptions2.title.text = "多平台借贷分析-近X天贷款的机构数";
             itemOptions2.xAxis.data = [
-              "借贷次数",
+              "借贷机构数(去重)",
               "15天",
               "1个月",
               "3个月",
               "6个月"
             ];
             let seriesData2 = {};
-            _.map(data.list, (val, key) => {
+            _.map(data.obj, (val, key) => {
               seriesData2[key] = val ? val : 0;
             });
             itemOptions2.series[0].data = [
               seriesData2.loanOrgCnt,
-              seriesData2.loanCnt15d,
-              seriesData2.loanCnt30d,
-              seriesData2.loanCnt90d,
-              seriesData2.loanCnt180d
+              seriesData2.loanOrgCnt15d,
+              seriesData2.loanOrgCnt30d,
+              seriesData2.loanOrgCnt90d,
+              seriesData2.loanOrgCnt180d
             ];
+            itemOptions2.tooltip.formatter = params => {
+              if (params[0].axisValueLabel == "借贷机构数(去重)") {
+                return (
+                  "借贷机构数(去重)：" + params[0].marker + params[0].value
+                );
+              } else {
+                return (
+                  "近" +
+                  params[0].axisValueLabel +
+                  "贷款的机构数：" +
+                  params[0].marker +
+                  params[0].value
+                );
+              }
+            };
             that.thirdChart3.setOption(itemOptions2);
             that.thirdChart3.resize();
           }
